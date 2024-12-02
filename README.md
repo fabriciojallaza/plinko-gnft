@@ -54,7 +54,7 @@ This project is **not affiliated with Stake.com** and is designed to promote lea
 
    ```bash
    pnpm install
-```
+    ```
 
 4. Start the development server
 
