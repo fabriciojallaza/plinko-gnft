@@ -19,6 +19,7 @@
   import Question from 'phosphor-svelte/lib/Question';
   import type { FormEventHandler } from 'svelte/elements';
   import { twMerge } from 'tailwind-merge';
+  import { onMount } from 'svelte';
 
   let betMode: BetMode = BetMode.MANUAL;
 
@@ -112,11 +113,20 @@
     { value: BetMode.AUTO, label: 'Auto' },
   ];
   const riskLevels = [
-    { value: RiskLevel.LOW, label: 'Low' },
+    //{ value: RiskLevel.LOW, label: 'Low' },
     { value: RiskLevel.MEDIUM, label: 'Medium' },
-    { value: RiskLevel.HIGH, label: 'High' },
+    //{ value: RiskLevel.HIGH, label: 'High' },
   ];
   const rowCounts = rowCountOptions.map((value) => ({ value, label: value.toString() }));
+
+
+  // Set the default value for rowCount when the component mounts
+  onMount(() => {
+    if (rowCounts.length === 1) {
+      $rowCount = rowCounts[0].value;
+    }
+  });
+
 </script>
 
 <div class="flex flex-col gap-5 bg-slate-700 p-3 lg:max-w-80">
@@ -146,15 +156,15 @@
           disabled={autoBetInterval !== null}
           type="number"
           min="0"
-          step="0.01"
+          step="1"
           inputmode="decimal"
           class={twMerge(
-            'w-full rounded-l-md border-2 border-slate-600 bg-slate-900 py-2 pl-7 pr-2 text-sm text-white transition-colors hover:cursor-pointer focus:border-slate-500 focus:outline-none disabled:cursor-not-allowed  disabled:opacity-50 hover:[&:not(:disabled)]:border-slate-500',
+            'w-full rounded-l-md border-2 border-slate-600 bg-slate-900 py-2 pl-20 pr-2 text-sm text-white transition-colors hover:cursor-pointer focus:border-slate-500 focus:outline-none disabled:cursor-not-allowed  disabled:opacity-50 hover:[&:not(:disabled)]:border-slate-500',
             (isBetAmountNegative || isBetExceedBalance) &&
               'border-red-500 focus:border-red-400 hover:[&:not(:disabled)]:border-red-400',
           )}
         />
-        <div class="absolute left-3 top-2 select-none text-slate-500" aria-hidden>$</div>
+        <div class="absolute left-3 top-2 select-none text-slate-500" aria-hidden>$GNFT</div>
       </div>
       <button
         disabled={autoBetInterval !== null}
@@ -186,23 +196,43 @@
 
   <div>
     <label for="riskLevel" class="text-sm font-medium text-slate-300">Risk</label>
-    <Select
-      id="riskLevel"
-      bind:value={$riskLevel}
-      items={riskLevels}
-      disabled={hasOutstandingBalls || autoBetInterval !== null}
-    />
+    {#if riskLevels.length === 1}
+      <!-- Display static text when only one option is available -->
+      <p class="text-sm text-slate-400">{riskLevels[0].label}</p>
+    {:else}
+      <!-- Fallback to Select if there are multiple options -->
+      <Select
+        id="riskLevel"
+        bind:value={$riskLevel}
+        items={riskLevels}
+        disabled={hasOutstandingBalls || autoBetInterval !== null}
+      />
+    {/if}
   </div>
 
   <div>
     <label for="rowCount" class="text-sm font-medium text-slate-300">Rows</label>
-    <Select
-      id="rowCount"
-      bind:value={$rowCount}
-      items={rowCounts}
-      disabled={hasOutstandingBalls || autoBetInterval !== null}
-    />
+    {#if rowCounts.length === 1}
+      <!-- Display static text and ensure value is set -->
+      <p class="text-sm text-slate-400">{rowCounts[0].label}</p>
+      <!-- bind the value to ensure it's set -->
+      {#if $rowCount === undefined}
+        {#each rowCounts as { value }}
+          {$rowCount = value}
+        {/each}
+      {/if}
+    {:else}
+      <!-- Fallback to Select if there are multiple options -->
+      <Select
+        id="rowCount"
+        bind:value={$rowCount}
+        items={rowCounts}
+        disabled={hasOutstandingBalls || autoBetInterval !== null}
+      />
+    {/if}
   </div>
+
+
 
   {#if betMode === BetMode.AUTO}
     <div>

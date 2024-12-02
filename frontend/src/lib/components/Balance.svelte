@@ -9,13 +9,29 @@
   });
 
   const addMoneyAmounts = [100, 500, 1000];
+  let isMetaMaskConnected = false;
+
+  async function connectMetaMask() {
+    if (typeof window.ethereum !== 'undefined') {
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        if (accounts.length > 0) {
+          isMetaMaskConnected = true;
+        }
+      } catch (error) {
+        console.error('MetaMask connection failed:', error);
+      }
+    } else {
+      console.error('MetaMask is not installed');
+    }
+  }
 </script>
 
 <div class="flex overflow-hidden rounded-md">
   <div
     class="flex gap-2 bg-slate-900 px-3 py-2 text-sm font-semibold tabular-nums text-white sm:text-base"
   >
-    <span class="select-none text-gray-500">$</span>
+    <span class="select-none text-gray-500">$GNFT</span>
     <span class="min-w-16 text-right">
       {balanceFormatted}
     </span>
@@ -44,4 +60,17 @@
       </div>
     </Popover.Content>
   </Popover.Root>
+  {#if !isMetaMaskConnected}
+    <button
+      on:click={connectMetaMask}
+      class="ml-2 rounded-md bg-yellow-500 px-4 py-2 text-sm font-medium text-gray-900 transition-colors hover:bg-yellow-400 active:bg-yellow-600"
+    >
+      Connect to MetaMask
+    </button>
+  {:else}
+    <div class="ml-2 flex items-center gap-2">
+      <span class="text-sm font-medium text-green-500">Connected</span>
+      <img src="/path/to/metamask-logo.png" alt="MetaMask Logo" class="h-6 w-6" />
+    </div>
+  {/if}
 </div>
