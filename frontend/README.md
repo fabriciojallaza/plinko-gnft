@@ -1,9 +1,9 @@
 <div align="center">
-  <img src="./static/android-chrome-192x192.png" width="100" height="100" alt="Logo">
+  <img src="staticndroid-chrome-192x192.png" width="100" height="100" alt="Logo">
   <h1>plinko-game</h1>
   <p>A web Plinko game inspired by Stake.com's Plinko game.</p>
   <p>Play now 👉 <a href="https://plinko-web-game.netlify.app/" target="_blank" rel="noreferrer">https://plinko-web-game.netlify.app/</a></p>
-  <img src="./screenshots/desktop-1.jpg" width="800">
+  <img src="screenshotsesktop-1.jpg" width="800">
 </div>
 
 ## About
@@ -104,4 +104,4 @@ Mobile:
 
 | Manual Mode                             | Auto Mode                               |
 | --------------------------------------- | --------------------------------------- |
-| ![Mobile 1](./screenshots/mobile-1.jpg) | ![Mobile 2](./screenshots/mobile-2.jpg) |
+| ![Mobile 1](screenshotsobile-1.jpg) | ![Mobile 2](screenshotsobile-2.jpg) |
